@@ -3,6 +3,7 @@ import { useState } from "react";
 import "./App.css";
 
 import FormInput from "./components/FormInput";
+import LibForm from "./components/LibForm";
 
 function App() {
   const [values, setValues] = useState({
@@ -106,7 +107,24 @@ function App() {
           >
             Submit
           </button>
+
+          <button
+            style={{
+              width: "50%",
+              border: "none",
+              borderRadius: "10px",
+              margin: "10px",
+              height: "50px",
+              backgroundColor: "purple",
+              color: "white",
+            }}
+          >
+            Using Libraries
+          </button>
         </form>
+      </div>
+      <div style={{ marginTop: "100px" }}>
+        <LibForm />
       </div>
     </>
   );
