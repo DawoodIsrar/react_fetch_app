@@ -1,0 +1,26 @@
+.form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-image: url("https://picsum.photos/seed/picsum/200/300");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.formarea {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  border-radius: 20px;
+  padding: 50px;
+  /* padding-right: 100px; */
+}
+button {
+  font-size: large;
+  font-weight: bold;
+  width: 100%;
+}
