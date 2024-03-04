@@ -1,9 +1,8 @@
 // import logo from "./logo.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 import "./App.css";
-
 import FormInput from "./components/FormInput";
-import LibForm from "./components/LibForm";
 
 function App() {
   const [values, setValues] = useState({
@@ -76,10 +75,71 @@ function App() {
     e.preventDefault();
   };
 
+  const [click, setClick] = useState(false);
+  const [posts, setPosts] = useState([]);
+  // useEffect(() => {
+  // handling api call using axios and make perfect error handling whenever request cnacle
+  // console.log(click);
+  // const cancelToken = axios.CancelToken.source();
+  // const getPost = async () => {
+  //   console.log("useEffect mount");
+  //   await axios
+  //     .get("https://jsonplaceholder.typicode.com/posts", {
+  //       cancelToken: cancelToken.token,
+  //     })
+  //     .then((res) => {
+  //       setPosts(res.data);
+  //       console.log("posts", res.data);
+  //     })
+  //     .catch((err) => {
+  //       if (axios.isCancel(err)) {
+  //         console.log("axios cancel");
+  //       } else {
+  //         console.log(err);
+  //       }
+  //     });
+
+  // cleanup function
+  // return () => {
+  //   cancelToken.cancel();
+  // };
+  // };
+  // handling api call using fetch and make perfect error handling whenever request cnacle
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    const getPost = async () => {
+      const controller = new AbortController();
+      const signal = controller.signal;
+      try {
+        setLoading(true);
+        const res = await fetch("https://jsonplaceholder.typicode.com/posts", {
+          signal,
+        });
+        console.log(res);
+        const data = await res.json();
+        console.log(data);
+        setLoading(false);
+
+        setPosts(data);
+      } catch (err) {
+        if (err.name === "AbortError") {
+          console.log("cancel");
+        } else {
+          console.log("another error");
+        }
+      }
+      // cleanup function
+      return () => {
+        controller.abort();
+      };
+    };
+    getPost();
+  }, [click]);
+
   console.log(values);
   return (
     <>
-      <div className="form">
+      {/* <div className="form">
         <form className="formarea" onSubmit={handleSubmit}>
           <h1 style={{ textAlign: "center", color: "purple" }}>Register</h1>
           {inputArray.map((input) => {
@@ -107,24 +167,27 @@ function App() {
           >
             Submit
           </button>
-          {/* 
-          <button
-            style={{
-              width: "50%",
-              border: "none",
-              borderRadius: "10px",
-              margin: "10px",
-              height: "50px",
-              backgroundColor: "purple",
-              color: "white",
-            }}
-          >
-            Using Libraries
-          </button> */}
         </form>
-      </div>
-      <div style={{ marginTop: "100px" }}>
-        <LibForm />
+      </div> */}
+      <div style={{ width: "50%" }}>
+        <button onClick={(e) => setClick(!click)}>Press to load post</button>
+        <button onClick={(e) => setClick(!click)}>
+          Press to load other post
+        </button>
+        <button onClick={(e) => setClick(!click)}>
+          Press to load newer post
+        </button>
+        <>
+          {loading ? (
+            <div>Loading......</div>
+          ) : (
+            <ul>
+              {posts.map((post) => (
+                <li key={post.id}>{post.title}</li>
+              ))}
+            </ul>
+          )}
+        </>
       </div>
     </>
   );
